@@ -23,9 +23,11 @@ A few machine learning literatures were reviewed. Particularly, algorithms such 
 An attempt was made to classify classes using a decision tree model. LightGBM was used in this case and was predicted on the test data-set. This algorithm is gradient boosting framework that uses tree-based learning algorithms. The given data array was reduced from 3-dimensions to 2 dimensions. For example, an array of 163x100x72 is reshaped to 163x7200. The areas of interest were kept between indices 5 to 40 in the time domain. The process of reshaping was repeated with the above time window. LightGBM supports input data files with CSV, TSV, and LibSVM formats. During scripting, instead of other data formats, we generated LightGBM data-frames for both train and test sets (Fig. 1). LightGBM required parameters to fit the algorithm in the training data. Parameters can be passed as a Python dictionary (Fig. 2). For more information on descriptions of all parameters refer to this [this page](https://lightgbm.readthedocs.io/en/latest/Parameters.html).
 
 ![lightGBM Data-Frame](images/dataFrame.png)
+
 Fig. 1 - LightGBM data-frame.
 
 ![Parameter Dictionary](images/parameterDictionary.png)
+
 Fig. 2 - LightGBM parameter dictionary.
 
 The first data acquisition process started from the bed system in the laboratory. The required chemical solutions were prepared to model the *in vitro* phantoms. The two chemicals used consisted of Glycerin and 30% Triton X1000. The adipose and the fibro-glandular shell were prepared and placed at the designated area on the bed system. The position of the phantom was secured using hot glue. Then, using PLANAR ACM8000T the radiating system on the bed was calibrated with a software made to interface with the bed system. A 3 cm tumour was placed inside the phantom at *X=2.25* and *Y=-2.25* cm according to the grid block resting on top of the phantom. After getting familiar with the process of scanning with the bed system, more scans were taken with different tumour positions. The data was retrieved and their validity was verified using a Python script.
@@ -74,11 +76,13 @@ Table 3 - Scan plan for 47 new samples.
 <br>
 
 ![Shells](images/shells.png)
+
 Fig 3 - Adipose and Fibro-glandular Shells.
 
 <br>
 
 ![Lumps](images/lumps.png)
+
 Fig 4 - Bulbs Acting as Lumps Inside the Phantom.
 
 #
@@ -88,11 +92,13 @@ The newly obtained data was processed and brought into the time domain. After me
 The newly generated data-set was applied to the shallow CNN regression model. The average %MSE over 30 iteration was (86 +/- 10)%. Figure 5 shows the prediction result of the regression model on the augmented test-set.
 
 ![Shallow CNN](images/shallowCNNprediction.png)
+
 Fig. 5 - Prediction Result of the Regression Model on the Augmented Test-set.
 
 To gain more insight into the behaviour of the model and data-set, classification was used instead of regression. *Tensorboard* was used to record learning behaviour of the models. Confusion matrices were generated to better visualize the number of false-positives and true-positives in the classifications. Different classification architectures were used, and data augmentation techniques were applied to both train and test set. The best classification performance belongs to the Hybrid CNN model architecture with an accuracy of (68 +/- 2)%. The Hybrid CNN model does not use a sequential method. This architecture consists of two input branches where one branch receives the training data set and the other branch receives extra features that were manually selected. Figure 6 shows the confusion matrix graph of the Hybrid CNN model:
 
 ![Hybrid CNN Confusion Matrix](images/confusionMatrixHC.png)
+
 Fig. 6 - Average Accuracy of Hybrid Shallow CNN Augmented Confusion Matrix.
 
 #
@@ -100,6 +106,7 @@ Fig. 6 - Average Accuracy of Hybrid Shallow CNN Augmented Confusion Matrix.
 At this stage the decision was made to unite two of the classes out of the three-class problem. This was done just for the sake of finding out if the model architecture is faulty or the data-set needs more processing. The data from two of the classes were combined to create single classes named: 1&2, 1&3, and 2&3. Therefore, the problem became a binary classification problem considering only two classes. For example, 1&2 and 3 were considered as a binary classification case. Same data augmentation techniques were applied to the train and test set. The average accuracy with united 1&3 class using shallow CNN was (84 +/- 3)%. Figure 7 shows the confusion matrix of the united 1&3 class using the shallow CNN model:
 
 ![Confusion Matrix Binary Shallow CNN](images/confusionMatrixBSC.png)
+
 Fig. 7 - Average Accuracy on Augmented Test Set with United 1&3 Classes Using Shallow CNN Model.
 
 #
@@ -111,6 +118,7 @@ In order to run the web interface, you must execute the following command in ter
 `$ tensorboard --logdir {directory that contains the callback files}`
 
 ![Tensorboard Plot](images/tensorboardPlot.png)
+
 Fig. 8 - Matplotlib generated plot using CSV data extracted from tensorboard.
 
 The above result is an indication that the model is no longer learning from the data. Hence, further investigation is required to discover why.
@@ -136,6 +144,7 @@ Fig. 11 - Output from MaxPool2D layer.
 Finally, a graph was visualized that represents the test set accuracy versus the number of samples in train set. This graph shows how test accuracy performs as the number of samples are increased in the train set. This was done in 20 steps of 50 iterations. In each iteration the entire data set is shuffled, and the distribution of 2 cm tumour sizes were flattened. Figure 10 shows the behaviour of the test set accuracy as we increase the train set samples. Note that by increasing the samples in train set the number of samples in test set decreases proportionally.
 
 ![Test vs. Train](images/testVsTrain.png)
+
 Fig. 10 - Graph of test set accuracy versus number of train set samples.
 
 #
